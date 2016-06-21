@@ -4,6 +4,7 @@ from glob import glob
 from urllib.request import urlopen, urlretrieve
 from time import time
 from zipfile import ZipFile
+from collections import namedtuple
 
 
 def update_tsv_export(reporthook=None):
@@ -42,39 +43,13 @@ def load(wanted_table, wanted_columns):
         with zipfile.open('WCA_export_' + wanted_table + '.tsv') as tablefile:
             column_names, *rows = [line.split('\t') for line in
                                    tablefile.read().decode().splitlines()]
-            columns = []
-            for name in wanted_columns.split():
-                i = column_names.index(name)
-                column = [row[i] for row in rows]
-                try:
-                    column = list(map(int, column))
-                except:
-                    pass
-                columns.append(column)
-            return list(zip(*columns))
 
+            wanted_columns = wanted_columns.split()
+            columns = [column_names.index(name) for name in wanted_columns]
+            Type = namedtuple(wanted_table, wanted_columns)
+            output = []
 
-def get_results():
-    print('extracting data ...')
+            for row in rows:
+                output.append(Type(*(row[i] for i in columns)))
 
-    results = load('Results', 'competitionId personId personCountryId eventId best average '
-                   'regionalSingleRecord regionalAverageRecord')
-    return results
-
-
-def get_ranking():
-    ranking = load('RanksAverage', 'personId eventId best')
-    countries = dict(load('Persons', 'id countryId'))
-    ranking = [(person_id, best) for person_id, event_id, best in ranking if event_id == '444' and countries[person_id] == 'Austria']
-    return ranking
-
-
-def get_comp_dates():
-    competitions = load('Competitions', 'id year endMonth endDay')
-    return {id: (int(year), int(endMonth), int(endDay))
-            for id, year, endMonth, endDay in competitions}
-
-
-def get_names():
-    names = dict(load('Persons', 'id name'))
-    return names
+            return output
