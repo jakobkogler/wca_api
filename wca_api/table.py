@@ -15,6 +15,16 @@ class table:
     def __len__(self):
         return len(self._rows)
 
+    def __str__(self):
+        if self._rows:
+            row_format = '{:>15} ' * len(self._rows[0])
+            output = [row_format.format(*self._rows[0]._fields)]
+            for row in self._rows:
+                output.append(row_format.format(*row))
+            return '\n'.join(output)
+        else:
+            return ''
+
     def filter(self, conditions: dict):
         if self._rows:
             fields = self._rows[0]._fields
@@ -40,3 +50,6 @@ class table:
 
         Type = namedtuple(self._name, fields)
         self._rows = [Type(*(getattr(row, field) for field in fields)) for row in self._rows]
+
+    def top(self, num):
+        self._rows = self._rows[:num]
