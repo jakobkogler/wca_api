@@ -15,15 +15,27 @@ class table:
     def __len__(self):
         return len(self._rows)
 
-    def __str__(self):
+    def __str__(self, many=10):
         if self._rows:
-            row_format = '{:>15} ' * len(self._rows[0])
+            lengths = [len(item) for item in self._rows[0]._fields]
+            for index, row in enumerate(self._rows):
+                if index == many:
+                    break
+                lengths = [max(a, b) for a, b in zip(lengths, map(len, row))]
+
+            row_format = ' '.join('{{:>{}}}' for _ in self._rows[0]).format(*lengths)
             output = [row_format.format(*self._rows[0]._fields)]
-            for row in self._rows:
+            for index, row in enumerate(self._rows):
+                if index == many:
+                    break
                 output.append(row_format.format(*row))
+
             return '\n'.join(output)
         else:
             return ''
+
+    def print_all(self):
+        print(self.__str__(-1))
 
     def filter(self, conditions: dict):
         if self._rows:

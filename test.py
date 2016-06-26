@@ -16,6 +16,4 @@ t.filter({'personCountryId': 'Austria', 'eventId': ['444']})
 print(t[:3])
 t.sort('average', reverse=True)
 t.restrict_fields(['personName', 'average', 'competitionId'])
-t.top(3)
 print(t)
-
