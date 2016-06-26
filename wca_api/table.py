@@ -1,4 +1,5 @@
 from collections import namedtuple
+from wca_api.comperator import Comperator
 
 
 class table:
@@ -37,29 +38,16 @@ class table:
     def print_all(self):
         print(self.__str__(-1))
 
-    def filter(self, conditions: dict):
-        if self._rows:
-            fields = self._rows[0]._fields
-            conditions = {field: allowed if isinstance(allowed, list) else [allowed]
-                          for field, allowed in conditions.items() if field in fields}
-            self._rows = [row for row in self._rows
-                          if all(getattr(row, field) in allowed for field, allowed in conditions.items())]
+    def filter(self, condition: Comperator):
+        self._rows = [row for row in self._rows if condition(row)]
 
     def sort(self, by, reverse=False):
         if not isinstance(by, list):
             by = [by]
 
-        if self._rows:
-            fields = self._rows[0]._fields
-            by = [name for name in by if name in fields]
-
-            self._rows.sort(key=lambda row: tuple(getattr(row, name) for name in by), reverse=reverse)
+        self._rows.sort(key=lambda row: tuple(getattr(row, name) for name in by), reverse=reverse)
 
     def restrict_fields(self, fields):
-        name = ''
-        if self._rows:
-            fields = [field for field in fields if field in self._rows[0]._fields]
-
         Type = namedtuple(self._name, fields)
         self._rows = [Type(*(getattr(row, field) for field in fields)) for row in self._rows]
 

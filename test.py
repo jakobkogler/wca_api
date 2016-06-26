@@ -1,5 +1,6 @@
 from wca_api.wca_api import update_tsv_export, load
 from wca_api.table import table
+from wca_api.comperator import OneOf, Equal
 
 update_tsv_export()
 s = table(load('Persons', 'id name'))
@@ -7,13 +8,15 @@ t = table(load('Results', 'competitionId eventId roundId pos best average person
 
 print(s[0:5])
 print(getattr(s[0], 'id'))
-s.filter({'name': ['Jakob Kogler', 'Röhrer']})
+s.filter(Equal('name', 'Jakob Kogler'))
 print(list(s))
-
 print()
 
-t.filter({'personCountryId': 'Austria', 'eventId': ['444']})
-print(t[:3])
-t.sort('average', reverse=True)
-t.restrict_fields(['personName', 'average', 'competitionId'])
+t.filter(Equal('personCountryId', 'Austria'))
+t.filter(OneOf('eventId', ['444bf', '555bf']))
 print(t)
+print()
+
+t.sort(['eventId', 'best'], reverse=True)
+t.restrict_fields(['personName', 'eventId', 'best', 'competitionId'])
+t.print_all()
