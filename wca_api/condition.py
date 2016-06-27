@@ -36,4 +36,4 @@ class DNF(Condition):
 
     def __call__(self, compare):
         """Check, if the item compare holds the object condition."""
-        return (getattr(compare, self._field) != -1) == self._dnf
+        return (getattr(compare, self._field) == -1) == self._dnf
