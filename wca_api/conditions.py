@@ -16,7 +16,7 @@ class OneOf(Condition):
 
     def __call__(self, compare):
         """Check, if the item compare holds the object condition."""
-        return getattr(compare, self._field) in self._lst
+        return getattr(compare, self._field, None) in self._lst
 
 
 class Equal(OneOf):
