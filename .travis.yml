@@ -8,3 +8,5 @@ install:
 script:
     - py.test
     - py.test --cov-report= --cov=wca_api tests/
+after_success:
+    - coveralls
