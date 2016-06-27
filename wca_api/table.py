@@ -24,8 +24,9 @@ class Table:
                     break
                 lengths = [max(a, b) for a, b in zip(lengths, [len(str(item)) for item in row])]
 
-            row_format = ' '.join('{{:>{}}}' for _ in self._rows[0]).format(*lengths)
+            row_format = ' | '.join('{{:>{}}}' for _ in self._rows[0]).format(*lengths)
             output = [row_format.format(*self._rows[0]._fields)]
+            output.append('-+-'.join('-'*length for length in lengths))
             for index, row in enumerate(self._rows):
                 if index == many:
                     break
