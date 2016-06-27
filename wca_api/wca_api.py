@@ -1,15 +1,19 @@
+"""Collection of methods for downloading the newest wca-databank and extracting the tables."""
+
 import os
 import re
 from glob import glob
 from urllib.request import urlopen, urlretrieve
+from urllib.error import HTTPError, URLError
 from time import time
 from zipfile import ZipFile
 from collections import namedtuple
 from wca_api.table import Table
 
+
 def update_tsv_export(reporthook=None):
-    """If export is missing or not current, download the current one.
-       Returns True iff the export was updated."""
+    """Download the newest wca_tsv_export, if the export is missing or not current.
+    Returns True iff the export was updated."""
 
     # Is export file missing or older than 10 minutes?
     here = glob('WCA_export*_*.tsv.zip')
@@ -21,7 +25,7 @@ def update_tsv_export(reporthook=None):
             print('downloading the newest export...')
             with urlopen(base + 'export.html') as file:
                 current = re.search(r'WCA_export\d+_\d+.tsv.zip', str(file.read())).group(0)
-        except:
+        except (AttributeError, HTTPError, URLError):
             print('failed looking for the newest export')
             return
 
@@ -39,22 +43,24 @@ def update_tsv_export(reporthook=None):
 
 
 def load(wanted_table, wanted_columns):
+    """Load certain columns from a downloaded tsv file."""
+
     with ZipFile(max(glob('WCA_export*_*.tsv.zip'))) as zipfile:
         with zipfile.open('WCA_export_' + wanted_table + '.tsv') as tablefile:
             column_names, *rows = [line.split('\t') for line in
                                    tablefile.read().decode().splitlines()]
 
             wanted_columns = wanted_columns.split()
-            Type = namedtuple(wanted_table, wanted_columns)
+            tuple_type = namedtuple(wanted_table, wanted_columns)
 
             columns = []
             for name in wanted_columns:
                 i = column_names.index(name)
                 column = [row[i] for row in rows]
                 try:
-                    column = list(map(int, column))
-                except:
+                    column = [int(item) for item in column]
+                except ValueError:
                     pass
                 columns.append(column)
 
-            return Table([Type(*row) for row in zip(*columns)])
+            return Table([tuple_type(*row) for row in zip(*columns)])
