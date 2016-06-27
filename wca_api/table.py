@@ -7,7 +7,6 @@ class Table:
     Supports easy filtering and sorting."""
 
     def __init__(self, rows: list):
-        self._name = type(rows[0]).__name__ if rows else ''
         self._rows = rows
 
     def __getitem__(self, item):
@@ -49,8 +48,11 @@ class Table:
         self._rows.sort(key=lambda row: tuple(getattr(row, name) for name in by), reverse=reverse)
 
     def restrict_fields(self, fields):
-        Type = namedtuple(self._name, fields)
+        Type = namedtuple('Row', fields)
         self._rows = [Type(*(getattr(row, field) for field in fields)) for row in self._rows]
 
     def top(self, num):
         self._rows = self._rows[:num]
+
+    def __eq__(self, other):
+        return self._rows == other._rows
