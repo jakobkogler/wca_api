@@ -1,8 +1,8 @@
-class Comperator:
+class Condition:
     pass
 
 
-class OneOf(Comperator):
+class OneOf(Condition):
     def __init__(self, field, lst):
         self._field = field
         self._lst = lst
@@ -16,7 +16,7 @@ class Equal(OneOf):
         super().__init__(field, [equal])
 
 
-class DNF(Comperator):
+class DNF(Condition):
     def __init__(self, field, dnf=True):
         self._field = field
         self._dnf = dnf

@@ -1,5 +1,5 @@
 from collections import namedtuple
-from wca_api.comperator import Comperator
+from wca_api.condition import Condition
 
 
 class Table:
@@ -39,7 +39,7 @@ class Table:
     def print_all(self):
         print(self.__str__(-1))
 
-    def filter(self, condition: Comperator):
+    def filter(self, condition: Condition):
         self._rows = [row for row in self._rows if condition(row)]
 
     def sort(self, by, reverse=False):
