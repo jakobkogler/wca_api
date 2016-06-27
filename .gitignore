@@ -1,3 +1,7 @@
 .idea
 **.zip
 __pycache__
+.cache
+build
+dist
+*.egg-info
