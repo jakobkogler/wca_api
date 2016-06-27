@@ -9,4 +9,5 @@ setup(
     license='MIT License',
     author='Jakob Kogler',
     description='API for the WCA database',
+    classifiers=['Programming Language :: Python :: 3', ],
 )
