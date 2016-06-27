@@ -37,3 +37,16 @@ class DNF(Condition):
     def __call__(self, compare):
         """Check, if the item compare holds the object condition."""
         return (getattr(compare, self._field) == -1) == self._dnf
+
+
+class TimeBetterThan(Condition):
+    """Class for checking, if a certain time is better than a threshold."""
+
+    def __init__(self, field, threshold):
+        """Store field name and threshold."""
+        self._field = field
+        self._threshold = threshold
+
+    def __call__(self, compare):
+        """Check, if the item compare holds the object condition."""
+        return getattr(compare, self._field) < self._threshold

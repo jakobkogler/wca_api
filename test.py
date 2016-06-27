@@ -1,5 +1,5 @@
 from wca_api.wca_api import update_tsv_export, load
-from wca_api.condition import OneOf, Equal, DNF
+from wca_api.condition import OneOf, Equal, DNF, TimeBetterThan
 
 update_tsv_export()
 s = load('Persons', 'id name')
@@ -22,4 +22,8 @@ t.print_all()
 print()
 
 t.filter(DNF('best', False))
+t.print_all()
+print()
+
+t.filter(TimeBetterThan('best', 30000))
 t.print_all()
