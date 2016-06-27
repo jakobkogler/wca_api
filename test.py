@@ -1,6 +1,5 @@
 from wca_api.wca_api import update_tsv_export, load
-from wca_api.table import Table
-from wca_api.comperator import OneOf, Equal
+from wca_api.comperator import OneOf, Equal, DNF
 
 update_tsv_export()
 s = load('Persons', 'id name')
@@ -19,4 +18,8 @@ print()
 
 t.sort(['eventId', 'best'], reverse=True)
 t.restrict_fields(['personName', 'eventId', 'best', 'competitionId'])
+t.print_all()
+print()
+
+t.filter(DNF('best', False))
 t.print_all()
