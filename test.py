@@ -1,5 +1,5 @@
 from wca_api.wca_api import update_tsv_export, load
-from wca_api.condition import OneOf, Equal, DNF, TimeBetterThan
+from wca_api.conditions import OneOf, Equal, DNF, TimeBetterThan
 
 update_tsv_export()
 s = load('Persons', 'id name')

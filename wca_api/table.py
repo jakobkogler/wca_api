@@ -1,5 +1,5 @@
 from collections import namedtuple
-from wca_api.condition import Condition
+from wca_api.conditions import Condition
 
 
 class Table:
