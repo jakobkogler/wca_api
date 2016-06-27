@@ -2,7 +2,7 @@ from collections import namedtuple
 from wca_api.comperator import Comperator
 
 
-class table:
+class Table:
     """Collection of rows of a table.
     Supports easy filtering and sorting."""
 
@@ -22,7 +22,7 @@ class table:
             for index, row in enumerate(self._rows):
                 if index == many:
                     break
-                lengths = [max(a, b) for a, b in zip(lengths, map(len, row))]
+                lengths = [max(a, b) for a, b in zip(lengths, [len(str(item)) for item in row])]
 
             row_format = ' '.join('{{:>{}}}' for _ in self._rows[0]).format(*lengths)
             output = [row_format.format(*self._rows[0]._fields)]

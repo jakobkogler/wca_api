@@ -1,10 +1,10 @@
 from wca_api.wca_api import update_tsv_export, load
-from wca_api.table import table
+from wca_api.table import Table
 from wca_api.comperator import OneOf, Equal
 
 update_tsv_export()
-s = table(load('Persons', 'id name'))
-t = table(load('Results', 'competitionId eventId roundId pos best average personName personCountryId formatId value1 value2 value3 value4 value5'))
+s = load('Persons', 'id name')
+t = load('Results', 'competitionId eventId roundId pos best average personName personCountryId formatId value1 value2 value3 value4 value5')
 
 print(s[0:5])
 print(getattr(s[0], 'id'))

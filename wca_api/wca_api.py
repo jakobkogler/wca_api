@@ -5,7 +5,7 @@ from urllib.request import urlopen, urlretrieve
 from time import time
 from zipfile import ZipFile
 from collections import namedtuple
-
+from wca_api.table import Table
 
 def update_tsv_export(reporthook=None):
     """If export is missing or not current, download the current one.
@@ -45,11 +45,16 @@ def load(wanted_table, wanted_columns):
                                    tablefile.read().decode().splitlines()]
 
             wanted_columns = wanted_columns.split()
-            columns = [column_names.index(name) for name in wanted_columns]
             Type = namedtuple(wanted_table, wanted_columns)
-            output = []
 
-            for row in rows:
-                output.append(Type(*(row[i] for i in columns)))
+            columns = []
+            for name in wanted_columns:
+                i = column_names.index(name)
+                column = [row[i] for row in rows]
+                try:
+                    column = list(map(int, column))
+                except:
+                    pass
+                columns.append(column)
 
-            return output
+            return Table([Type(*row) for row in zip(*columns)])
