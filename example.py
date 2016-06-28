@@ -27,3 +27,4 @@ print()
 
 t.filter(TimeBetterThan('best', 30000))
 print(t.all_to_string())
+

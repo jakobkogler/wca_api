@@ -1,7 +1,6 @@
 import pytest
-from wca_api.table import Table
-from wca_api.conditions import Equal, OneOf, DNF, TimeBetterThan
 from collections import namedtuple
+from wca_api.table import Table
 
 
 class TestConditions:
@@ -15,27 +14,32 @@ class TestConditions:
     eve_fra_dnf = row_type('Eve', 'France', -1)
 
     def test_sort(self):
-        lst = [self.alice_deu_957, self.bob_aut_1138, self.bob_aut_999, self.carol_deu_1527, self.dave_fra_999]
+        lst = [self.alice_deu_957, self.bob_aut_1138, self.bob_aut_999,
+               self.carol_deu_1527, self.dave_fra_999]
 
         # sort by country
         table = Table(lst)
         table.sort('country')
-        assert table == Table([self.bob_aut_1138, self.bob_aut_999, self.dave_fra_999, self.alice_deu_957, self.carol_deu_1527])
+        assert table == Table([self.bob_aut_1138, self.bob_aut_999, self.dave_fra_999,
+                               self.alice_deu_957, self.carol_deu_1527])
 
         # sort by country reverse
         table = Table(lst)
         table.sort('country', reverse=True)
-        assert table == Table([self.alice_deu_957, self.carol_deu_1527, self.dave_fra_999, self.bob_aut_1138, self.bob_aut_999])
+        assert table == Table([self.alice_deu_957, self.carol_deu_1527, self.dave_fra_999,
+                               self.bob_aut_1138, self.bob_aut_999])
 
         # sort by int value
         table = Table(lst)
         table.sort('best')
-        assert table == Table([self.alice_deu_957, self.bob_aut_999, self.dave_fra_999, self.bob_aut_1138, self.carol_deu_1527])
+        assert table == Table([self.alice_deu_957, self.bob_aut_999, self.dave_fra_999,
+                               self.bob_aut_1138, self.carol_deu_1527])
 
         # sort by int value reverse
         table = Table(lst)
         table.sort('best', reverse=True)
-        assert table == Table([self.carol_deu_1527, self.bob_aut_1138, self.bob_aut_999, self.dave_fra_999, self.alice_deu_957])
+        assert table == Table([self.carol_deu_1527, self.bob_aut_1138, self.bob_aut_999,
+                               self.dave_fra_999, self.alice_deu_957])
 
         # sort by unknown field name
         table = Table(lst)
@@ -111,16 +115,20 @@ class TestConditions:
                     '  Bob | Austria |  999')
         assert table.all_to_string() == expected
 
+        # empty table
+        table = Table([])
+        assert str(table) == ''
+
     def test_len(self):
-            lst = [self.alice_deu_957, self.bob_aut_999]
+        lst = [self.alice_deu_957, self.bob_aut_999]
 
-            # test length function
-            table = Table(lst)
-            assert len(table) == 2
+        # test length function
+        table = Table(lst)
+        assert len(table) == 2
 
-            # test empty
-            table = Table([])
-            assert len(table) == 0
+        # test empty
+        table = Table([])
+        assert len(table) == 0
 
     def test_top(self):
         lst = [self.alice_deu_957, self.bob_aut_999]

@@ -1,7 +1,7 @@
 import pytest
-from wca_api.table import Table
-from wca_api.conditions import Equal, OneOf, DNF, TimeBetterThan
 from collections import namedtuple
+from wca_api.conditions import Equal, OneOf, DNF, TimeBetterThan
+from wca_api.table import Table
 
 
 class TestConditions:
@@ -15,7 +15,8 @@ class TestConditions:
     eve_fra_dnf = row_type('Eve', 'France', -1)
 
     def test_equal(self):
-        lst = [self.alice_deu_957, self.bob_aut_1138, self.bob_aut_999, self.carol_deu_1527, self.dave_fra_999]
+        lst = [self.alice_deu_957, self.bob_aut_1138, self.bob_aut_999,
+               self.carol_deu_1527, self.dave_fra_999]
 
         # filter by name
         table = Table(lst)
@@ -45,7 +46,8 @@ class TestConditions:
         assert table == Table([])
 
     def test_oneof(self):
-        lst = [self.alice_deu_957, self.bob_aut_1138, self.bob_aut_999, self.carol_deu_1527, self.dave_fra_999]
+        lst = [self.alice_deu_957, self.bob_aut_1138, self.bob_aut_999,
+               self.carol_deu_1527, self.dave_fra_999]
 
         # filter by name
         table = Table(lst)
@@ -111,7 +113,8 @@ class TestConditions:
         assert table == Table(lst)
 
     def test_time_better_than(self):
-        lst = [self.alice_deu_957, self.bob_aut_1138, self.bob_aut_999, self.carol_deu_1527, self.dave_fra_999]
+        lst = [self.alice_deu_957, self.bob_aut_1138, self.bob_aut_999,
+               self.carol_deu_1527, self.dave_fra_999]
 
         # filter for times smaller than 1000
         table = Table(lst)
