@@ -67,12 +67,70 @@ class TestConditions:
         assert table == Table(lst2)
 
     def test_str(self):
+        # 2 entries
         lst = [self.alice_deu_957, self.bob_aut_999]
-
-        print(Table(lst))
         expected = (' name | country | best\n'
                     '------+---------+-----\n'
                     'Alice | Germany |  957\n'
                     '  Bob | Austria |  999')
+        table = Table(lst)
+        assert str(table) == expected
 
-        assert str(Table(lst)) == expected
+        # more than 10 entries
+        lst = [self.alice_deu_957] * 10 + [self.bob_aut_999]
+        table = Table(lst)
+        expected = (' name | country | best\n'
+                    '------+---------+-----\n'
+                    'Alice | Germany |  957\n'
+                    'Alice | Germany |  957\n'
+                    'Alice | Germany |  957\n'
+                    'Alice | Germany |  957\n'
+                    'Alice | Germany |  957\n'
+                    'Alice | Germany |  957\n'
+                    'Alice | Germany |  957\n'
+                    'Alice | Germany |  957\n'
+                    'Alice | Germany |  957\n'
+                    'Alice | Germany |  957')
+        assert str(table) == expected
+
+        # more than 10 entries with all_to_str
+        lst = [self.alice_deu_957] * 10 + [self.bob_aut_999]
+        table = Table(lst)
+        expected = (' name | country | best\n'
+                    '------+---------+-----\n'
+                    'Alice | Germany |  957\n'
+                    'Alice | Germany |  957\n'
+                    'Alice | Germany |  957\n'
+                    'Alice | Germany |  957\n'
+                    'Alice | Germany |  957\n'
+                    'Alice | Germany |  957\n'
+                    'Alice | Germany |  957\n'
+                    'Alice | Germany |  957\n'
+                    'Alice | Germany |  957\n'
+                    'Alice | Germany |  957\n'
+                    '  Bob | Austria |  999')
+        assert table.all_to_string() == expected
+
+    def test_len(self):
+            lst = [self.alice_deu_957, self.bob_aut_999]
+
+            # test length function
+            table = Table(lst)
+            assert len(table) == 2
+
+            # test empty
+            table = Table([])
+            assert len(table) == 0
+
+    def test_top(self):
+        lst = [self.alice_deu_957, self.bob_aut_999]
+
+        # only the first one element
+        table = Table(lst)
+        table.top(1)
+        assert table == Table([self.alice_deu_957])
+
+        # more than there are actually in the table
+        table = Table(lst)
+        table.top(3)
+        assert table == Table(lst)

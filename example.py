@@ -18,12 +18,12 @@ print()
 
 t.sort(['eventId', 'best'], reverse=True)
 t.restrict_fields(['personName', 'eventId', 'best', 'competitionId'])
-t.print_all()
+print(t.all_to_string())
 print()
 
 t.filter(DNF('best', False))
-t.print_all()
+print(t.all_to_string())
 print()
 
 t.filter(TimeBetterThan('best', 30000))
-t.print_all()
+print(t.all_to_string())

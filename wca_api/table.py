@@ -36,8 +36,8 @@ class Table:
         else:
             return ''
 
-    def print_all(self):
-        print(self.__str__(-1))
+    def all_to_string(self):
+        return self.__str__(-1)
 
     def filter(self, condition: Condition):
         self._rows = [row for row in self._rows if condition(row)]
