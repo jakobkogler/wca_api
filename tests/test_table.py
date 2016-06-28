@@ -142,3 +142,16 @@ class TestConditions:
         table = Table(lst)
         table.top(3)
         assert table == Table(lst)
+
+    def test_equality(self):
+        lst = [self.alice_deu_957, self.bob_aut_999]
+
+        # equal
+        table1 = Table(lst)
+        table2 = Table(lst)
+        assert table1 == table2
+
+        # not equal
+        table1 = Table(lst)
+        table2 = Table([self.alice_deu_957])
+        assert table1 != table2
