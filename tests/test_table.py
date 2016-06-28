@@ -65,3 +65,14 @@ class TestConditions:
         table = Table(lst)
         table.restrict_fields(['name', 'average'])
         assert table == Table(lst2)
+
+    def test_str(self):
+        lst = [self.alice_deu_957, self.bob_aut_999]
+
+        print(Table(lst))
+        expected = (' name | country | best\n'
+                    '------+---------+-----\n'
+                    'Alice | Germany |  957\n'
+                    '  Bob | Austria |  999')
+
+        assert str(Table(lst)) == expected
