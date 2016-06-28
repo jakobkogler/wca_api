@@ -1,5 +1,6 @@
 from collections import namedtuple
 from wca_api.conditions import Condition
+from copy import copy
 
 
 class Table:
@@ -7,7 +8,7 @@ class Table:
     Supports easy filtering and sorting."""
 
     def __init__(self, rows: list):
-        self._rows = rows
+        self._rows = copy(rows)
 
     def __getitem__(self, item):
         return self._rows[item]
@@ -45,9 +46,11 @@ class Table:
         if not isinstance(by, list):
             by = [by]
 
-        self._rows.sort(key=lambda row: tuple(getattr(row, name) for name in by), reverse=reverse)
+        self._rows.sort(key=lambda row: tuple(getattr(row, name, None) for name in by), reverse=reverse)
 
     def restrict_fields(self, fields):
+        if self._rows:
+            fields = [field for field in fields if getattr(self._rows[0], field, None) is not None]
         Type = namedtuple('Row', fields)
         self._rows = [Type(*(getattr(row, field) for field in fields)) for row in self._rows]
 

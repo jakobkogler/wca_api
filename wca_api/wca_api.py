@@ -13,7 +13,7 @@ from wca_api.table import Table
 
 def update_tsv_export(reporthook=None):
     """Download the newest wca_tsv_export, if the export is missing or not current.
-    Returns True iff the export was updated."""
+    Returns True iff the export was updated or was alread on the newest stand."""
 
     # Is export file missing or older than 10 minutes?
     here = glob('WCA_export*_*.tsv.zip')
@@ -27,7 +27,7 @@ def update_tsv_export(reporthook=None):
                 current = re.search(r'WCA_export\d+_\d+.tsv.zip', str(file.read())).group(0)
         except (AttributeError, HTTPError, URLError):
             print('failed looking for the newest export')
-            return
+            return False
 
         # Download if necessary, otherwise mark local as up-to-date
         if not os.path.isfile(current):
@@ -37,9 +37,10 @@ def update_tsv_export(reporthook=None):
             for here_file in here:
                 if here_file != current:
                     os.remove(here_file)
-            return True
         else:
             os.utime(max(here))
+
+    return True
 
 
 def load(wanted_table, wanted_columns):
